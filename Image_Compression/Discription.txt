@@ -1,0 +1,2 @@
+will look for *.DDS files in all of the sub folder from where the script is ran from, and then compress it as well as make mip-maps in the texture files.
+the compression is not the best. for skyrim this needs to be BC7 for SE and BC1 for LE. but this script doesn't do this type of compression.
