@@ -30,3 +30,30 @@ language-tool-python
 pyspellchecker
 tqdm
 tkinter
+```
+
+
+Usage
+
+    Clone or download this repository.
+
+    Install the required dependencies using the requirements.txt file:
+
+    bash
+
+pip install -r requirements.txt
+
+Run the script:
+
+bash
+
+python html_processor.py
+
+The GUI will open where you can:
+
+    Select the input directory containing the HTML files.
+    Select the output directory for the processed files.
+    Choose the desired output format or select All Formats to save the files in all formats.
+    Click Start to begin processing.
+
+The progress of the file processing will be shown both in the GUI and the command-line terminal.
