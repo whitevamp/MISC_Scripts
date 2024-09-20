@@ -21,7 +21,7 @@ This Python script provides a user interface (UI) to move or copy multiple files
 ## Installation
 1. Clone this repository to your local machine:
    ```bash
-   git clone https://github.com/yourusername/file-mover-copy.git
+   git clone git clone https://github.com/whitevamp/MISC_Scripts.git
    ```
 2. Navigate to the script directory:
    ```bash
