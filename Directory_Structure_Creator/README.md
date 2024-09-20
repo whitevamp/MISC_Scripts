@@ -23,7 +23,7 @@ This Python script provides a graphical user interface (GUI) to create customiza
 1. **Clone or Download the Repository**:
    - Clone the repository using Git:
      ```bash
-     git clone https://github.com/yourusername/DirectoryStructureCreator.git
+     git clone https://github.com/whitevamp/MISC_Scripts.git
      ```
    - Or download the `.zip` file from GitHub and extract it.
 
