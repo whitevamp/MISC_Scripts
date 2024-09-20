@@ -84,14 +84,3 @@ This project is licensed under the MIT License. See the [LICENSE](LICENSE) file 
 ## Contribution
 Feel free to submit issues or pull requests to improve the script!
 ```
-
-### Key Sections in the README:
-- **Features**: Lists the main capabilities of the script.
-- **Requirements**: Explains that Tkinter and shutil are built-in libraries, making it easier for users.
-- **Installation**: Steps for cloning and running the script.
-- **Usage Instructions**: Detailed steps on how to use the UI and customize the behavior.
-- **Example Scenario**: Practical examples showing how files are processed.
-- **Error Handling**: Explains the error checking.
-- **License** and **Contribution** sections for adding proper open-source etiquette.
-
-Feel free to adjust this as necessary for your GitHub repo!
