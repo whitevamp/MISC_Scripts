@@ -83,4 +83,3 @@ This project is licensed under the MIT License. See the [LICENSE](LICENSE) file 
 
 ## Contribution
 Feel free to submit issues or pull requests to improve the script!
-```
