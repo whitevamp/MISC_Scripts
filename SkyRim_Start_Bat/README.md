@@ -9,7 +9,9 @@ This batch script is designed to randomly select a file from a source directory,
 
 - Randomly selects one file from the source directory.
 - Deletes all files in the destination directory before copying.
+- Renames the chosen source file.
 - Automatically overwrites any files in the destination folder with the newly copied file.
+- Will wait 5 seconds before, specified program start's.
 - Launches a specified program after the file copy operation is complete.
 
 ## Requirements
@@ -29,11 +31,13 @@ Before running the script, open the `.bat` file in a text editor and modify the 
 ```batch
 set "source_dir=C:\path\to\source\folder"
 set "dest_dir=C:\path\to\destination\folder"
+set "new_file_name=newname.dds"
 start "" "C:\path\to\your\program.exe"
 ```
 
 - `source_dir`: Path to the folder containing the files you want to randomly copy.
 - `dest_dir`: Path to the destination folder where the randomly selected file will be copied.
+- `new_file_name`: Name of new file.
 - `start "" "C:\path\to\your\program.exe"`: Path to the program you want to run after the file has been copied.
 
 ### 3. Run the Script
@@ -48,6 +52,7 @@ start "" "C:\path\to\your\program.exe"
 2. The script will:
    - Delete all files in the destination directory.
    - Randomly select a file from the source directory.
+   - Renames the chosen source file.
    - Copy the selected file to the destination directory.
    - Launch the specified program.
 
@@ -88,6 +93,6 @@ This script is free to use and modify. No warranties or guarantees are provided.
 ### How to Use:
 
 1. **Download/Clone**: Get the script onto your local machine.
-2. **Edit**: Modify the `source_dir`, `dest_dir`, and the program path in the script as per your needs.
+2. **Edit**: Modify the `source_dir`, `dest_dir`, `new_file_name`, and the program path in the script as per your needs.
 3. **Run**: Execute the `.bat` file by double-clicking it, or running it through the command line.
 
