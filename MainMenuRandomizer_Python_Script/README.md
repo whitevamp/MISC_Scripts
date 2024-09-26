@@ -101,7 +101,7 @@ To convert the Python script into an executable, you can use `PyInstaller`. Foll
    ```
 ### Notes:
 
-you have to use double \\ in the config file.
+Ensure to use double backslashes (`\\`) in file paths.
 For MO2 you may also need to add "start in" path and also set "Arguments" -c "path/to/custom_config.ini", when setting it as an executable in MO2.
 
 ## License
