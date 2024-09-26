@@ -1,5 +1,3 @@
-Here’s the complete README formatted in Markdown for GitHub:
-
 ```markdown
 # Main Menu Randomizer & Game Start
 
