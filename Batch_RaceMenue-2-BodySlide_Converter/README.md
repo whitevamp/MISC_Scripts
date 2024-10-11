@@ -125,6 +125,13 @@ Here’s a detailed list of all the changes that were made to the original scrip
 
 These changes significantly improve the stability, flexibility, and maintainability of the script.
 
+## License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+If you use this code, please provide credit by including a reference to the original author.
+
+
 ver1.5 changes.
 added in more BodySlide options, to be completed. from sysdmp credits to them for the extra, BodySlide options
 added in more error handling checks.

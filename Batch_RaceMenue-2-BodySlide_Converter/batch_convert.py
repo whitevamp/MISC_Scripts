@@ -168,6 +168,7 @@ bodyslide_elems = [
     "WristSize",
 ]
 
+__version__ = "1.5.0"
 
 # def load_json(file):
     # """Load and parse JSON file, handling any JSON errors."""
@@ -235,9 +236,23 @@ def prettify(elem):
     return reparsed.toprettyxml(indent="\t")
 
 
+#def log_error(message):
+#    """Append error message to an error log file, including script version."""
+#    error_log_path = os.path.join(os.getcwd(), 'error_log.txt')
+#    with open(error_log_path, 'a') as error_log:
+#        error_log.write(f"Version {__version__}: {message}\n")
+#        #error_log.write(message + '\n')
 def log_error(message):
-    """Append error message to an error log file."""
+    """Append error message to an error log file. If the file is new, log the script version first."""
     error_log_path = os.path.join(os.getcwd(), 'error_log.txt')
+
+    # Check if the error log file already exists and has content
+    if not os.path.exists(error_log_path) or os.stat(error_log_path).st_size == 0:
+        # If file doesn't exist or is empty, write the version at the top
+        with open(error_log_path, 'a') as error_log:
+            error_log.write(f"Script Version: {__version__}\n")
+
+    # Now append the actual error message
     with open(error_log_path, 'a') as error_log:
         error_log.write(message + '\n')
 
