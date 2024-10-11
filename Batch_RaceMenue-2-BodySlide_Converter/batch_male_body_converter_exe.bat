@@ -1,0 +1,1 @@
+batch_convert.exe 0.5 1.5 SMMB "SMMB High Poly SOS Body"
