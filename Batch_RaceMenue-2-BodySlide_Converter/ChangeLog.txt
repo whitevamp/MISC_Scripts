@@ -132,6 +132,6 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 If you use this code, please provide credit by including a reference to the original author.
 
 
-ver1.5 changes.
+ver1.1 changes.
 added in more BodySlide options, to be completed. from sysdmp credits to them for the extra, BodySlide options
 added in more error handling checks.

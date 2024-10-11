@@ -168,7 +168,7 @@ bodyslide_elems = [
     "WristSize",
 ]
 
-__version__ = "1.5.0"
+__version__ = "1.1.0"
 
 # def load_json(file):
     # """Load and parse JSON file, handling any JSON errors."""
