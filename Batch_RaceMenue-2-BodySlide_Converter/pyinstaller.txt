@@ -1,0 +1,1 @@
+pyinstaller --onefile --version-file version_info.txt batch_convert.py
