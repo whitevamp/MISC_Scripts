@@ -1,8 +1,8 @@
 # version_info.txt
 VSVersionInfo(
     ffi=FixedFileInfo(
-        filevers=(1, 1, 0, 0),  # File version (major, minor, patch, build)
-        prodvers=(1, 1, 0, 0),  # Product version
+        filevers=(1, 7, 0, 0),  # File version (major, minor, patch, build)
+        prodvers=(1, 7, 0, 0),  # Product version
         mask=0x3f,
         flags=0x0,
         OS=0x40004,
@@ -18,12 +18,12 @@ VSVersionInfo(
                     [
                         StringStruct('CompanyName', 'whitevamp'),
                         StringStruct('FileDescription', 'Batch Process RaceMenu jslot to BodySlide Conversion'),
-                        StringStruct('FileVersion', '1.1.0'),
+                        StringStruct('FileVersion', '1.7.0'),
                         StringStruct('InternalName', 'batch_convert'),
                         StringStruct('LegalCopyright', 'MIT License'),
                         StringStruct('OriginalFilename', 'batch_convert.py'),
                         StringStruct('ProductName', 'batch_convert'),
-                        StringStruct('ProductVersion', '1.1.0'),
+                        StringStruct('ProductVersion', '1.7.0'),
                     ]
                 )
             ]

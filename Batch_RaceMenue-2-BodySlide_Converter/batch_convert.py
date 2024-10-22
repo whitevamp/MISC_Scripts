@@ -1,10 +1,11 @@
-#ver1.5
+# ver1.7.0
 import json
 import os
 import xml.etree.ElementTree as ET
 import xml.dom.minidom as MD
 from sys import argv
-
+import configparser
+import re
 
 # BodySlide options, to be completed
 bodyslide_elems = [
@@ -168,141 +169,148 @@ bodyslide_elems = [
     "WristSize",
 ]
 
-__version__ = "1.1.0"
+__version__ = "1.7.0"
 
-# def load_json(file):
-    # """Load and parse JSON file, handling any JSON errors."""
-    # try:
-        # with open(file, 'r') as handle:
-            # parsed = json.load(handle)
-        # return parsed
-    # except json.JSONDecodeError as e:
-        # # Log error message and skip the file
-        # error_message = f"Skipping file due to JSONDecodeError at {file}: {str(e)}"
-        # print(error_message)
-        # log_error(error_message)
-        # return None  # Return None for invalid JSON
 def load_json(file):
     """Load and parse JSON file, handling any JSON errors and null characters."""
     try:
         with open(file, 'r', encoding='utf-8') as handle:
             content = handle.read()
 
-        # Check for null characters and log their presence
+        # Check for null characters and remove them
         if '\x00' in content:
-            log_message = f"Found null character at the end of the file: {file}"
+            log_message = f"Found null character in: {file}"
             print(log_message)
             log_error(log_message)
-            
-            # Remove null characters
-            content = content.replace('\x00', '')
+            content = content.replace('\x00', '')  # Remove null characters
 
-        # Attempt to load the JSON data
+        # Parse the JSON content
         parsed = json.loads(content)
         return parsed
 
     except json.JSONDecodeError as e:
+        # Handle JSON decoding errors
         error_message = f"Skipping file due to JSONDecodeError at {file}: {str(e)}"
         print(error_message)
         log_error(error_message)
-        return None  # Return None for invalid JSON
+        return None
 
     except Exception as e:
-        # Catch other exceptions (e.g., IOError, etc.)
+        # Handle all other exceptions
         error_message = f"Error processing file {file}: {str(e)}"
         print(error_message)
         log_error(error_message)
         return None
 
-
-def save_xml(file, data):
-    """Saves the file to the fixed directory: /output/CalienteTools/BodySlide/SliderPresets/."""
-    # Define the output directory
-    output_dir = os.path.join(os.getcwd(), 'output', 'CalienteTools', 'BodySlide', 'SliderPresets')
-    
-    # Ensure the output directory exists
-    if not os.path.exists(output_dir):
-        os.makedirs(output_dir)
-    
-    output_path = os.path.join(output_dir, f"{file}.xml")
-    with open(output_path, 'w') as handle:
-        handle.write(prettify(data.getroot()))
-
+def save_xml(file, data, output_dir):
+    """Save the XML file to the specified output directory."""
+    try:
+        # Ensure output directory exists
+        if not os.path.exists(output_dir):
+            os.makedirs(output_dir)
+        
+        # Save the XML data to the output directory
+        output_path = os.path.join(output_dir, f"{file}.xml")
+        with open(output_path, 'w') as handle:
+            handle.write(prettify(data.getroot()))
+    except Exception as e:
+        error_message = f"Error saving XML file: {str(e)}"
+        print(error_message)
+        log_error(error_message)
 
 def prettify(elem):
-    """Return a pretty-printed XML string for the Element."""
+    """Format XML to be pretty-printed."""
     rough_string = ET.tostring(elem, 'utf-8')
     reparsed = MD.parseString(rough_string)
     return reparsed.toprettyxml(indent="\t")
 
-
-#def log_error(message):
-#    """Append error message to an error log file, including script version."""
-#    error_log_path = os.path.join(os.getcwd(), 'error_log.txt')
-#    with open(error_log_path, 'a') as error_log:
-#        error_log.write(f"Version {__version__}: {message}\n")
-#        #error_log.write(message + '\n')
 def log_error(message):
-    """Append error message to an error log file. If the file is new, log the script version first."""
+    """Log errors to an error_log.txt file."""
     error_log_path = os.path.join(os.getcwd(), 'error_log.txt')
 
-    # Check if the error log file already exists and has content
     if not os.path.exists(error_log_path) or os.stat(error_log_path).st_size == 0:
-        # If file doesn't exist or is empty, write the version at the top
         with open(error_log_path, 'a') as error_log:
             error_log.write(f"Script Version: {__version__}\n")
 
-    # Now append the actual error message
     with open(error_log_path, 'a') as error_log:
         error_log.write(message + '\n')
 
-
 def convert_racemenu_2_bodyslide(file_path: str, small_size_modifier: float = 0.5, big_size_modifier: float = 1.5,
-                                 group_name: str = None, body_name: str = None):
+                                 group_name: str = None, body_name: str = None, output_dir: str = None):
     try:
-        # Read input file
-        input_data = load_json(file_path)
+        # Step 1: Read and handle null characters in the file
+        with open(file_path, 'r', encoding='utf-8', errors='ignore') as f:
+            file_content = f.read()
+        
+        if '\x00' in file_content:
+            # Log the presence of null characters
+            print(f"Found null character in: {file_path}")
+            log_error(f"Found null character in: {file_path}")
+            # Optionally remove null characters from the content
+            file_content = file_content.replace('\x00', '')
 
-        # Skip processing if JSON is invalid
-        if input_data is None:
+        # Step 2: Process the JSON data after cleaning
+        try:
+            input_data = json.loads(file_content)
+        except json.JSONDecodeError as e:
+            error_message = f"Error decoding JSON in file: {file_path}, error: {str(e)}"
+            print(error_message)
+            log_error(error_message)
             return
 
-        # Get bodyMorph node
-        body_morph = input_data['bodyMorphs']  # This might raise KeyError if 'bodyMorphs' is missing
+        body_morph = input_data.get('bodyMorphs', [])
         size = 'small' if input_data['actor']['weight'] < 50 else 'big'
 
-        # Fill missing entries
         for e in bodyslide_elems:
             if e not in [a['name'] for a in body_morph]:
                 body_morph.append({
                     'name': e,
-                    'keys': [{'value': 0}]  # Providing default value for missing 'keys'
+                    'keys': [{'value': 0}]
                 })
 
-        # Build XML
         r = ET.Element('SliderPresets')
         tree = ET.ElementTree(r)
         root = tree.getroot()
 
         file_name = os.path.splitext(os.path.basename(file_path))[0]
         preset = ET.SubElement(root, 'Preset')
-        preset.attrib['name'] = file_name
-        preset.attrib['set'] = body_name if body_name else file_name + " body"
 
-        if group_name:
-            group = ET.SubElement(preset, 'Group')
-            group.attrib['name'] = group_name
+        # Set 'name' attribute for preset
+        preset.attrib['name'] = file_name  # Always set the preset name as the file name
 
-        # Calculate new values
+        # Set the 'set' attribute based on body_type for 3BA or other body types
+        if body_type and body_type != 'SMMB':  # Ensure body_type is not None
+            preset.attrib['set'] = body_type  # Use body_type directly for non-SMMB
+        else:
+            preset.attrib['set'] = body_name if body_name else f"{file_name} body"  # Use body_name for SMMB, or fallback
+
+        # Set the group name according to body_type
+        group_name = body_type if body_type else "DefaultGroup"  # Fallback to DefaultGroup if body_type is None
+        group = ET.SubElement(preset, 'Group')
+        group.attrib['name'] = group_name
+
+        ###
+        # added for future use maby.
+        # for entry in body_morph:
+        # # Check for 'keys' and set default if missing
+        # keys = entry.get('keys', [{'value': 0}])  # Default value if 'keys' is missing
+        
+        # if not isinstance(keys, list):
+            # error_message = f"Invalid 'keys' format in bodyMorph entry for '{entry.get('name', 'Unknown')}' in {file_path}"
+            # print(error_message)
+            # log_error(error_message)
+            # continue  # Skip this entry if 'keys' format is incorrect
+        
+        # value = sum(key.get('value', 0) for key in keys)
+        # name = entry['name']
+
         for entry in body_morph:
-            # Check if 'keys' exists and has valid data
             if 'keys' not in entry or not isinstance(entry['keys'], list):
-                error_message = f"Missing 'keys' in bodyMorph entry for '{entry.get('name', 'Unknown')}' in {file_path}"
+                error_message = f"Missing 'keys' in bodyMorph entry for '{entry.get('name', 'Unknown')}' in {file_path}. Entry: {entry}"
                 print(error_message)
                 log_error(error_message)
-                continue  # Skip to the next entry if 'keys' is missing
+                continue
 
-            # Sum the 'value' fields from 'keys'
             value = sum(key.get('value', 0) for key in entry['keys'])
             name = entry['name']
 
@@ -310,50 +318,89 @@ def convert_racemenu_2_bodyslide(file_path: str, small_size_modifier: float = 0.
                 bodyslide_elems.append(name)
 
             value_new = round(value * 100)
-            slider = ET.SubElement(preset, 'SetSlider')
-            slider.attrib['name'] = name
-            slider.attrib['size'] = "small"
-            slider.attrib['value'] = str(round(value_new * small_size_modifier)) if size == "small" else str(value_new)
+            # Small size slider
+            slider_small = ET.SubElement(preset, 'SetSlider')
+            slider_small.attrib['name'] = name
+            slider_small.attrib['size'] = "small"
+            slider_small.attrib['value'] = str(round(value_new * small_size_modifier)) if size == "small" else str(value_new)
 
-            slider = ET.SubElement(preset, 'SetSlider')
-            slider.attrib['name'] = name
-            slider.attrib['size'] = "big"
-            slider.attrib['value'] = str(round(value_new * big_size_modifier)) if size == "big" else str(value_new)
+            # Big size slider
+            slider_big = ET.SubElement(preset, 'SetSlider')
+            slider_big.attrib['name'] = name
+            slider_big.attrib['size'] = "big"
+            slider_big.attrib['value'] = str(round(value_new * big_size_modifier)) if size == "big" else str(value_new)
 
-        save_xml(file_name, tree)
+        # Save XML file, ensuring no None values in the attributes
+        try:
+            save_xml(file_name, tree, output_dir)
+        except Exception as e:
+            error_message = f"Error saving XML file: {str(e)}"
+            print(error_message)
+            log_error(error_message)
 
     except KeyError as e:
         if str(e) == "'bodyMorphs'":
-            # Log the error, showing the file name and path
             error_message = f"Skipping file due to missing 'bodyMorphs': {file_path}"
             print(error_message)
-            log_error(error_message)  # Write the error to an error log file
+            log_error(error_message)
         else:
-            raise  # Raise other unexpected KeyErrors
+            raise
 
+def load_config():
+    """Load configuration settings from config.ini."""
+    config = configparser.ConfigParser()
+    config.read('config.ini')
+
+    small_size_modifier = config.getfloat('Settings', 'small_size_modifier', fallback=0.5)
+    big_size_modifier = config.getfloat('Settings', 'big_size_modifier', fallback=1.5)
+    body_type = config.get('Settings', 'body_type', fallback='3BA')
+    body_name = config.get('Settings', 'body_name', fallback=None if body_type != 'SMMB' else "SMMB High Poly SOS Body")
+
+    # Set input and output directories to the script's current working directory
+    default_output_dir = os.path.join(os.getcwd(), 'output', 'CalienteTools', 'BodySlide', 'SliderPresets')
+    default_input_dir = os.getcwd()
+
+    input_dir = config.get('Paths', 'input_dir', fallback=default_input_dir)
+    output_dir = config.get('Paths', 'output_dir', fallback=default_output_dir)
+
+    # Ensure directories are valid
+    if not os.path.isabs(input_dir):
+        input_dir = default_input_dir
+
+    if not os.path.isabs(output_dir):
+        output_dir = default_output_dir
+
+    print(f"Input directory set to: {input_dir}")
+    print(f"Output directory set to: {output_dir}")
+
+    return small_size_modifier, big_size_modifier, body_type, body_name, input_dir, output_dir
 
 if __name__ == "__main__":
+    small_size_modifier, big_size_modifier, body_type, body_name, input_dir, output_dir = load_config()
+
     try:
-        # Recursively walk through directories
-        for root, dirs, files in os.walk(os.getcwd()):
-            # Skip the output directory to avoid processing the generated files
+        for root, dirs, files in os.walk(input_dir):
             if 'output' in dirs:
                 dirs.remove('output')
 
             for file in files:
                 if file.endswith('.jslot'):
                     file_path = os.path.join(root, file)
-                    # Convert with appropriate arguments
+
+                    # Handle command-line arguments if provided
                     if len(argv) > 1:
+                        body_type = argv[3] if len(argv) >= 4 else body_type
+                        body_name = argv[4] if len(argv) == 5 and body_type == "SMMB" else body_name
+
                         if len(argv) == 2:
-                            convert_racemenu_2_bodyslide(file_path, float(argv[1]))
+                            convert_racemenu_2_bodyslide(file_path, small_size_modifier, big_size_modifier, output_dir=output_dir)
                         elif len(argv) == 3:
-                            convert_racemenu_2_bodyslide(file_path, float(argv[1]), float(argv[2]))
-                        elif len(argv) == 4:
-                            convert_racemenu_2_bodyslide(file_path, float(argv[1]), float(argv[2]), argv[3])
-                        else:
-                            convert_racemenu_2_bodyslide(file_path, float(argv[1]), float(argv[2]), argv[3], argv[4])
+                            convert_racemenu_2_bodyslide(file_path, small_size_modifier, big_size_modifier, output_dir=output_dir)
+                        elif len(argv) >= 4:
+                            convert_racemenu_2_bodyslide(file_path, small_size_modifier, big_size_modifier, body_type, body_name, output_dir=output_dir)
                     else:
-                        convert_racemenu_2_bodyslide(file_path)
+                        # Use default config values
+                        convert_racemenu_2_bodyslide(file_path, small_size_modifier, big_size_modifier, body_name=body_name, output_dir=output_dir)
+
     except Exception as e:
         print(f"Error: {e}")

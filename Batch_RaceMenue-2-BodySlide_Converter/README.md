@@ -131,6 +131,27 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 If you use this code, please provide credit by including a reference to the original author.
 
+Here’s a summary of the changes for version 1.7 that you can use for your version change text file and mod page:
+
+### Version 1.7.0 - Changelog
+
+**Enhancements:**
+1. **Input Directory Handling**: Added the ability to specify an `input_dir` in the `config.ini` file, defaulting to the script's directory.
+2. **Improved Output Directory Handling**: The `output_dir` now defaults to the script's directory and is set to `output/CalienteTools/BodySlide/SliderPresets`.
+3. **Error Handling Enhancements**:
+   - Added handling for JSON files with null characters, allowing the script to continue processing other files even if one contains errors.
+   - Improved logging for missing 'keys' in bodyMorph entries, allowing the script to skip problematic entries without crashing.
+
+**Code Improvements:**
+1. **Group Name Setting**: Group name is now correctly set based on `body_type`.
+2. **XML Serialization Fixes**: Fixed issues related to serializing `NoneType` values when saving XML.
+3. **Additional Comments**: More comments added throughout the code for better readability and understanding.
+
+**Bug Fixes:**
+1. **Null Character Processing**: Implemented logic to log and handle null characters in JSON files without stopping the entire script.
+
+These updates contribute to better functionality, stability, and maintainability of the script while ensuring it meets user requirements effectively.
+
 
 ver1.1 changes.
 added in more BodySlide options, to be completed. from sysdmp credits to them for the extra, BodySlide options
