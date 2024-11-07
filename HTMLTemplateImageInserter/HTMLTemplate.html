@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Anachiro Slideshow</title>
+<style>
+  body, html {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    overflow: hidden;
+  }
+  #slideshow-container {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    overflow: hidden;
+    display: flex; /* Use flexbox to align images */
+  }
+  #slideshow-container img {
+    flex: 1; /* Make images fill available space evenly */
+    object-fit: cover; /* Ensure entire image is visible without stretching */
+    height: 100%;
+    width: auto;
+    transition: opacity 1s ease-in-out;
+  }
+</style>
+</head>
+<body>
+<div id="slideshow-container">
+  <img id="image1">
+  <img id="image2">
+</div>
+<script>
+  var images = [
+// Add your image filenames here
+
+]; 
+  var currentIndex = -1;
+  var previousIndex = -1;
+  var slideshowImages = document.querySelectorAll('#slideshow-container img');
+  var containerWidth = document.getElementById('slideshow-container').offsetWidth;
+  var containerHeight = document.getElementById('slideshow-container').offsetHeight;
+  
+  function shuffleArray(array) {
+    for (var i = array.length - 1; i > 0; i--) {
+      var j = Math.floor(Math.random() * (i + 1));
+      [array[i], array[j]] = [array[j], array[i]];
+    }
+    return array;
+  }
+  
+  function loadNextImages() {
+    images = shuffleArray(images); // Shuffle the array of images
+    currentIndex = (currentIndex + 1) % images.length;
+    
+    // Ensure the next image index is different from the previous one
+    while (currentIndex === previousIndex) {
+      currentIndex = (currentIndex + 1) % images.length;
+    }
+    
+    previousIndex = currentIndex; // Update previous index
+    
+    // Set image source and adjust dimensions dynamically
+    slideshowImages.forEach(function(img, index) {
+      var imgIndex = (currentIndex + index) % images.length;
+      img.src = './' + images[imgIndex];
+      img.onload = function() {
+        adjustImageDimensions(img);
+        checkImageCropping();
+      };
+    });
+    
+    setTimeout(loadNextImages, 10000); // Change time interval (milliseconds)
+  }
+  
+  
+  function adjustImageDimensions(img) {
+    var imgRatio = img.naturalWidth / img.naturalHeight;
+    var containerRatio = containerWidth / containerHeight;
+  //function adjustImageDimensions(img) {
+    //var imgRatio = img.naturalWidth / img.naturalHeight;
+    //var containerRatio = containerWidth / containerHeight;
+    //var screenAspectRatio = screen.width / screen.height;
+
+    if (imgRatio > screenAspectRatio) {
+      img.style.width = 'auto';
+      img.style.height = '100%';
+    } else {
+      img.style.width = '100%';
+      img.style.height = 'auto';
+    }
+  }
+  
+  function checkImageCropping() {
+    var totalWidth = 0;
+    slideshowImages.forEach(function(img) {
+      totalWidth += img.offsetWidth;
+    });
+    
+    if (totalWidth > containerWidth) {
+      adjustImageSizes();
+    }
+  }
+  
+  function adjustImageSizes() {
+    var totalWidth = 0;
+    var resizedIndexes = [];
+    
+    slideshowImages.forEach(function(img, index) {
+      totalWidth += img.offsetWidth;
+      if (totalWidth > containerWidth) {
+        resizedIndexes.push(index);
+        img.style.display = 'none'; // Hide images that exceed the container width
+      }
+    });
+    
+    if (resizedIndexes.length > 0) {
+      var newImgIndex = (currentIndex + 1) % images.length; // Get the index of the next image
+      var visibleImageIndex = resizedIndexes.shift(); // Get the first index of a hidden image
+      slideshowImages[visibleImageIndex].src = './' + images[newImgIndex];
+      slideshowImages[visibleImageIndex].style.display = 'block'; // Show the new image
+      adjustImageDimensions(slideshowImages[visibleImageIndex]); // Adjust its dimensions
+    }
+  }
+  
+  // Preload the first set of images before starting the slideshow
+  loadNextImages();
+</script>
+</body>
+</html>
