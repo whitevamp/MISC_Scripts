@@ -1,0 +1,5 @@
+True alphabet
+Get-ChildItem *.txt | Where-Object { $_.BaseName -match '^\d+' } | Sort-Object { [int]($_.BaseName) } | ForEach-Object { Get-Content $_.FullName } | Out-File merged.txt
+
+not true.
+Get-ChildItem *.txt | Sort-Object { [int]($_.BaseName) } | ForEach-Object { Get-Content $_.FullName } | Out-File merged.txt
