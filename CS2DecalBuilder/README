@@ -1,7 +1,3 @@
-Perfect name choice — `CS2DecalBuilder.py` is clear, on-brand, and great for discoverability on GitHub or modding sites. Here's a clean, well-structured `README.md` file for your repo:
-
----
-
 ```markdown
 # 🎨 CS2DecalBuilder
 
@@ -107,7 +103,5 @@ MIT — use freely, credit appreciated!
 
 Open an issue or hit me up if you're using this for a CS2 mod — I'd love to see what you build!
 ```
-
----
 
 Would you also like me to prep a `.gitignore`, or maybe a `requirements.txt` for sharing it more easily?
