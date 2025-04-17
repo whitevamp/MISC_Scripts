@@ -1,0 +1,67 @@
+Ratiostxt
+E2Clipse shared this file. Want to do more with it?
+
+    When spawning a decal,there is also a mesh that needs to be created.
+    The decal.json file houses parameters you can tweak to suit your decals needs.
+    The code under "colossal_mesh" has parameters you can change according to how big you want your decal to spawn
+    The parameters look like this:
+    ﻿
+    		        	"colossal_MeshSize": {
+    x is for width	  			 "x": 4,
+    y is for depth 				 "y": 1,
+    z is for heigth  		    	 "z": 4,
+    w is for spawn angle     		 "w": 0
+    ﻿
+    ﻿
+    The size of your texture and how big you want your decal to spawn dictate the x and z value seen above
+    !!Do not use a comma to specify decimals as this will brake the code!!
+    ﻿
+    ﻿
+    ﻿
+    Common texture sizes and there respective ratio's with certain meshsizes:
+    ﻿
+    L 512  x H 512 	= 1 x 1  	 chosen mesh size of 2 =    "x": 2 and  "z": 2 parameters
+    L 1024 x H 1024	= 1 x 1  	 chosen mesh size of 4 =    "x": 4 and  "z": 4 parameters    
+    L 2048 x H 2048 = 1 x 1  	 chosen mesh size of 6 =    "x": 6 and  "z": 6 parameters
+    ﻿
+    L 512 x H 1024 	= 1 x 2  	 chosen mesh size of 4 =    "x": 4 and  "z": 8 parameters
+    L 512 x H 1536 	= 1 x 3  	 chosen mesh size of 4 =    "x": 4 and  "z": 12 parameters
+    L 512 x H 2024 	= 1 x 4  	 chosen mesh size of 4 =    "x": 4 and  "z": 16 parameters
+    ﻿
+    L 1024 x H 512 	= 2 x 1  	 chosen mesh size of 4 =    "x": 8 and  "z": 4 parameters
+    L 1536 x H 512 	= 3 x 1   	 chosen mesh size of 4 =    "x": 12 and  "z": 4 parameters
+    L 2048 x H 512  = 4 x 1  	 chosen mesh size of 4 =    "x": 16 and  "z": 4 parameters 
+    ﻿
+    L 1024 x H 1536	= 1 x 1.5  	 chosen mesh size of 6 =    "x": 6 and  "z": 9 parameters
+    L 2048 x H 1536 = 2 x 1.5        chosen mesh size of 6 =    "x": 12 and  "z": 9 parameters
+    ﻿
+    L 1536 x H 1024	= 1.5 x 1        chosen mesh size of 6 =    "x": 9 and  "z": 12 parameters 
+    L 1536 x H 2048 = 1.5 x 2        chosen mesh size of 6 =    "x": 12 and  "z": 9 parameters
+    ﻿
+    ﻿
+    ﻿
+    If you choose a different meshsize just adjust it according to the ratio like the examples below
+    ﻿
+    Examples:
+    ﻿
+    If your decal is 512x512 "x": 2 and "z": 2 might be enough,but if you want it to be bigger use "x": 6 and "z": 6 for example
+    This will stretch your decal out though,so with bigger numbers you need bigger textures
+    If your decal is 512x512 and you want your meshsize to be 4
+    The ratio is 1:1  and x is 4 and z is 4
+    ﻿
+    ﻿
+    If your decal is 1024x512 and your meshsize is 4, you need to adjust the x value to be twice as big as the z value
+    The ratio is 2:1  and x is 8 and z is 4
+    ﻿
+    ﻿
+    If your decal is L 2048x1536 and the meshsize is 4, you need to adjust the z value to be 1.5 as big as the x value
+    The ratio is 2:1.5 and x is 4 and z is 3 
+    ﻿
+    ﻿
+    ﻿
+    ﻿
+    I hope this all makes sense, its a bit technical but you should manage fine
+    Any questions i will answer in the comments
+    ﻿
+
+We use cookies to provide, improve, protect and promote our services. Visit our Privacy Policy and Privacy Policy FAQs to learn more. You can manage your personal preferences, including your ‘Do not sell or share my personal data to third parties’ setting using the “Customize cookies” button below.

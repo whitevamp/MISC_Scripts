@@ -1,0 +1,113 @@
+Perfect name choice — `CS2DecalBuilder.py` is clear, on-brand, and great for discoverability on GitHub or modding sites. Here's a clean, well-structured `README.md` file for your repo:
+
+---
+
+```markdown
+# 🎨 CS2DecalBuilder
+
+A GUI-based Python tool for converting and preparing custom image decals for use in **Cities: Skylines II** mods. Easily convert your PNG/JPG files into properly structured decal assets with adjusted metadata and folder structure.
+
+---
+
+## ✨ Features
+
+- ✅ Simple **Tkinter GUI** with text input + file/folder browser support  
+- ✅ Converts JPG/JPEG to PNG (with proper transparency and resizing)  
+- ✅ Adjusts mesh size values in a template JSON based on image dimensions  
+- ✅ Renames and structures output folders/files automatically  
+- ✅ Places image and decal.json in unique folders (e.g., `tree123/_BaseColorMap.png`)  
+- ✅ Fully compatible with **CS2 modding requirements**  
+
+---
+
+## 🖥️ Requirements
+
+- Python 3.8+
+- [Pillow](https://pypi.org/project/Pillow/) (`pip install pillow`)
+
+---
+
+## 🚀 Getting Started
+
+1. **Clone this repo** or [download the script](CS2DecalBuilder.py)
+
+2. **Install dependencies**:
+   ```bash
+   pip install pillow
+   ```
+
+3. **Run the tool**:
+   ```bash
+   python CS2DecalBuilder.py
+   ```
+
+---
+
+## 🧰 How To Use
+
+1. Select your:
+   - 📁 Source folder (where your image files are)
+   - 📁 Destination folder (where the structured output will go)
+   - 📄 Template JSON file (base decal file to modify)
+   - ✍️ Prefix (used for folder naming like `tree456`)
+
+2. Click **Start Processing**
+
+The tool will:
+- Walk through your source folder
+- Convert non-PNG files to `.png`
+- Resize images safely for CS2 (avoiding Unity texture errors)
+- Generate mesh sizes in `decal.json` based on image resolution
+- Save the image as `_BaseColorMap.png` with the updated decal file
+
+---
+
+## 📐 Mesh Size Calculation
+
+Automatically determines mesh values from the texture resolution using rules like:
+
+| Resolution       | Mesh Size Output      |
+|------------------|------------------------|
+| 512 x 512        | `"x": 4, "z": 4`       |
+| 1024 x 1536      | `"x": 6, "z": 9`       |
+| 2048 x 512       | `"x": 16, "z": 4`      |
+
+*(Fully based on Cities: Skylines II decal size specs)*
+
+---
+
+## 🧪 Example Output
+
+```
+destination_folder/
+├── tree456/
+│   ├── _BaseColorMap.png
+│   └── decal.json
+├── tree901/
+│   ├── _BaseColorMap.png
+│   └── decal.json
+```
+
+---
+
+## ❗ Troubleshooting
+
+- **Unity errors?** This tool now pads/resizes small images to avoid "Failed to create texture" errors in-game
+- **Non-square textures?** Automatically calculates ratio and adjusts mesh X/Z accordingly
+
+---
+
+## 📄 License
+
+MIT — use freely, credit appreciated!
+
+---
+
+## 💬 Feedback or Feature Requests?
+
+Open an issue or hit me up if you're using this for a CS2 mod — I'd love to see what you build!
+```
+
+---
+
+Would you also like me to prep a `.gitignore`, or maybe a `requirements.txt` for sharing it more easily?
